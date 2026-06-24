@@ -1,0 +1,317 @@
+{
+  "name": "My workflow 4",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        16,
+        208
+      ],
+      "id": "45594e93-3314-4079-ac46-e18404ee33dc",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1saF8rz1YrjFyF1YEwERq09Mq5LDM9-Ns",
+          "mode": "list",
+          "cachedResultName": "Complete_Golf_Rules_Handbook.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/1saF8rz1YrjFyF1YEwERq09Mq5LDM9-Ns/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "6dfb775a-5554-4ae0-a694-ac84ebd4624c",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "Mppa3fN7jna2AQUD",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "document1",
+          "mode": "list",
+          "cachedResultName": "document1"
+        },
+        "options": {
+          "queryName": "match_document1"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        464,
+        256
+      ],
+      "id": "69f739d9-5ed2-4dff-85a9-7921998d6b9e",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "syjCBUWiQOFJUxTw",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        384
+      ],
+      "id": "2a98498e-1426-433d-9b9c-8c46551f1cef",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        752,
+        160
+      ],
+      "id": "ea313fe2-a055-4431-951b-c3a5bfb9ee80",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "SVoYn0HOlFWzllEV",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi! I can help you with golf rules. Ask me anything!",
+        "options": {
+          "inputPlaceholder": "Ask about golf rules...",
+          "loadPreviousSession": "memory",
+          "subtitle": "Ask me anything about golf rules",
+          "title": "Golf Rules Assistant",
+          "responseMode": "streaming"
+        }
+      },
+      "id": "825c8953-7c60-41d6-a64a-2c77958199c6",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        192,
+        -64
+      ],
+      "webhookId": "c16f2ef0-c688-4d53-a939-0a9f4611981c"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful golf rules assistant. Use the Golf Rules Retriever tool to search the golf rules documents and answer questions accurately. If you are not sure about something, say so."
+        }
+      },
+      "id": "7b75162b-01db-493d-b5c5-f70aba3fbce0",
+      "name": "Golf Rules Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        576,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3-haiku",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        544,
+        -48
+      ],
+      "id": "e77ec8a7-669e-4c38-98d2-710f8eb20e89",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "NVXC1jM2EQ4kZglY",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "call this tool to look for the rules of golf",
+        "tableName": {
+          "__rl": true,
+          "value": "document1",
+          "mode": "list",
+          "cachedResultName": "document1"
+        },
+        "options": {
+          "queryName": "match_document1"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        672,
+        -48
+      ],
+      "id": "2025ec4c-3f26-441e-9a86-ce6576c395d3",
+      "name": "Supabase Vector Store2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "syjCBUWiQOFJUxTw",
+          "name": "Supabase account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.4,
+      "position": [
+        912,
+        -160
+      ],
+      "id": "45b418fe-7510-45a9-83a4-5a0d5f803726",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "DtYCIO8HTBNsdq5L",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Supabase Vector Store2",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "Golf Rules Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Golf Rules Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store2": {
+      "ai_tool": [
+        [
+          {
+            "node": "Golf Rules Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Golf Rules Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0db27617-d91e-4254-856c-598cb3db4b7a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e595bc982d7789b26e3ff78aef1bc41b9308ccb55ea65871edac700aa81ca3f4"
+  },
+  "nodeGroups": [],
+  "id": "Ojy942wh6Q4uZBOv",
+  "tags": []
+}
